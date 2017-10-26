@@ -12,7 +12,7 @@
 			"description": "",
 			"item": [
 				{
-					"name": "Get UserID as sub",
+					"name": "01 Get UserID as sub",
 					"event": [
 						{
 							"listen": "test",
@@ -39,14 +39,20 @@
 					"request": {
 						"url": "https://{{hostenv}}/oauth/userinfo",
 						"method": "GET",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJ0eXAiOiJNVCIsImFsZyI6IlJTMjU2Iiwia2lkIjoiNjgxODVmZjEtNGU1MS00Y2U5LWFmMWMtNjg5ODEyMjAzMzE3In0.AQkAAAABAAUABwCASFR9IBzVSAgAgIh3i2Mc1UgCAP0uTJAcyZBKsAxQmuvwj74NACQAAAAxOWYzYzNjNy02Y2M4LTRhY2ItYTIxMi0wZDk2NzZjNDJkYmMVAAEAAAASAAAAAAAYAAIAAAAFAAAAHQAAACAAANx8zRsc1Ug.v-0ayZDjkNjsoLFEwWeEFN3o4EKrpyFmFHL_a-1B2AL4PE5uFxpFa4BCtI8Y5uYdvzmfdSV7y1gt94k-Dnp42LG7R6RNeJWatAt4huCxjLsVPabUVRZudNMHlMz5z2NxamvhcZ8ELe-vky_Wc9Nr0hYpHdBfWQ5VdY4vLCJk3RmS8LU8PUXDsemFDVaexzzn4bTNROjGz5PA7GF_qkUG2Q7Kr5plZMHNnd38VQta9wO4U68BiCjdo-nkK_kOCEijUfQFXp2c7iuVbFqkAL4dGgg0WnCdK-xkKWsOmWB7g6yLO2dcdyooKwcxXcsRMzWYP_9EF62Xy97Gd9H761bbvw",
+								"description": ""
+							}
+						],
 						"body": {},
 						"description": "1) 下記のAuthorizationタブを選択し、\"Get New Access Token\"ボタンを押してください。\n2) ポップアップWindow内に下記の情報を入力してください。\n・Token Name: <任意の名前>\n・Auth URL : https://account-d.docusign.com/oauth/auth\n・Access Token URL: https://account-d.docusign.com/oauth/token\n・Client ID: <Integrator Key>\n・Client Secret: <秘密鍵>\n・Scope: \"signature impersonation\"\n・Grant Type: Authorization Code\n3) ユーザーIDとパスワードを入力し、次の画面で同意してください。\n4) 2で指定したトークン名がボタンの下に表示されるので、クリック。\n5) 右の画面で、\"Add token to\"で\"Header\"を選択し、\"Use Token\"ボタンを押す\n6) Sendボタンを押して、APIを呼び出す"
 					},
 					"response": []
 				},
 				{
-					"name": "Get Access Token",
+					"name": "02 Get Access Token",
 					"event": [
 						{
 							"listen": "test",
@@ -80,7 +86,7 @@
 								},
 								{
 									"key": "assertion",
-									"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxOWYzYzNjNy02Y2M4LTRhY2ItYTIxMi0wZDk2NzZjNDJkYmMiLCJzdWIiOiI5MDRjMmVmZC1jOTFjLTRhOTAtYjAwYy01MDlhZWJmMDhmYmUiLCJpYXQiOjE1MDg5ODY3NzUsImV4cCI6MTUwODk5MDM3NSwiYXVkIjoiYWNjb3VudC1kLmRvY3VzaWduLmNvbSIsInNjb3BlIjoic2lnbmF0dXJlIn0.awc3F_8meCWR9BL_YE15EoTfgP8RJadK8HaoayG98PU5Yls4ZkFLhfrMxALfeE6u4deVHfURPiY57HOKtMPojLSXELG5ECdWG5SLAeR5beIyU_haxSt36aiGgFPMFsfgSkV1cSHMP6tA2HMb04aRNU0bDq8EyiEfQ8r7xAxMPnbaDMvciMUF5zwL0_QXdxzBgw4z1eSF6eecNEINZh6KDP2HvdJByWbwsB58rWrMRLoxDTti5CElcyvAr8DlPqJ3J54eQlWNCr_qB-nmdwb7A1zowbpRBe8mUObv8Fx3S13wK3mHO78iHrshPsY5XIzftRM9bwu7y5gq0TXwHOu8HA",
+									"value": "<JWTトークン>",
 									"description": "",
 									"type": "text"
 								}
@@ -91,7 +97,7 @@
 					"response": []
 				},
 				{
-					"name": "Get UserInfo",
+					"name": "03 Get UserInfo(BaseURL)",
 					"event": [
 						{
 							"listen": "test",
