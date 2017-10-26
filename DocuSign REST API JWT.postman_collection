@@ -1,0 +1,125 @@
+{
+	"variables": [],
+	"info": {
+		"name": "DocuSign REST API JWT",
+		"_postman_id": "c5985caf-d29f-849f-25a2-acafff3ea1f8",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "00_Authenticate",
+			"description": "",
+			"item": [
+				{
+					"name": "Get UserID as sub",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"sub\", jsonData.sub);"
+								]
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"if(!environment[\"hostenv\"]){",
+									"    postman.setEnvironmentVariable(\"hostenv\", \"account-d.docusign.com\");",
+									"}"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{hostenv}}/oauth/userinfo",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": "1) 下記のAuthorizationタブを選択し、\"Get New Access Token\"ボタンを押してください。\n2) ポップアップWindow内に下記の情報を入力してください。\n・Token Name: <任意の名前>\n・Auth URL : https://account-d.docusign.com/oauth/auth\n・Access Token URL: https://account-d.docusign.com/oauth/token\n・Client ID: <Integrator Key>\n・Client Secret: <秘密鍵>\n・Scope: \"signature impersonation\"\n・Grant Type: Authorization Code\n3) ユーザーIDとパスワードを入力し、次の画面で同意してください。\n4) 2で指定したトークン名がボタンの下に表示されるので、クリック。\n5) 右の画面で、\"Add token to\"で\"Header\"を選択し、\"Use Token\"ボタンを押す\n6) Sendボタンを押して、APIを呼び出す"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accesstoken\", jsonData.access_token);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{hostenv}}/oauth/token",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "urn:ietf:params:oauth:grant-type:jwt-bearer",
+									"description": "",
+									"type": "text"
+								},
+								{
+									"key": "assertion",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiIxOWYzYzNjNy02Y2M4LTRhY2ItYTIxMi0wZDk2NzZjNDJkYmMiLCJzdWIiOiI5MDRjMmVmZC1jOTFjLTRhOTAtYjAwYy01MDlhZWJmMDhmYmUiLCJpYXQiOjE1MDg5ODY3NzUsImV4cCI6MTUwODk5MDM3NSwiYXVkIjoiYWNjb3VudC1kLmRvY3VzaWduLmNvbSIsInNjb3BlIjoic2lnbmF0dXJlIn0.awc3F_8meCWR9BL_YE15EoTfgP8RJadK8HaoayG98PU5Yls4ZkFLhfrMxALfeE6u4deVHfURPiY57HOKtMPojLSXELG5ECdWG5SLAeR5beIyU_haxSt36aiGgFPMFsfgSkV1cSHMP6tA2HMb04aRNU0bDq8EyiEfQ8r7xAxMPnbaDMvciMUF5zwL0_QXdxzBgw4z1eSF6eecNEINZh6KDP2HvdJByWbwsB58rWrMRLoxDTti5CElcyvAr8DlPqJ3J54eQlWNCr_qB-nmdwb7A1zowbpRBe8mUObv8Fx3S13wK3mHO78iHrshPsY5XIzftRM9bwu7y5gq0TXwHOu8HA",
+									"description": "",
+									"type": "text"
+								}
+							]
+						},
+						"description": "https://jwt.io/にアクセスし、JWTトークンを生成して、Bodyのassertionにセットしてください。\nUnix時間はhttp://url-c.com/tc/で取得\n{\n  \"alg\": \"RS256\",\n  \"typ\": \"JWT\"\n}\n{\n  \"iss\": \"<IntegratorKey>\",\n  \"sub\": \"<前のステップで取得したsub値>\",\n  \"iat\": <UnixTimeでの有効開始日時>,\n  \"exp\": <UnixTimeでの有効開始日時+1時間>,\n  \"aud\": \"account-d.docusign.com\",\n  \"scope\": \"signature\"\n}\nRSASHA256(\n  base64UrlEncode(header) + \".\" +\n  base64UrlEncode(payload),\n  \nPublic Key or Certificate. Enter it in plain text only if you want to verify a token\n,\n  \nPrivate Key (RSA). Enter the it in plain text only if you want to generate a new token. The key never leaves your browser.\n\n)"
+					},
+					"response": []
+				},
+				{
+					"name": "Get UserInfo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"baseUrl\", jsonData.accounts[0].base_uri);"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "https://{{hostenv}}/oauth/userinfo",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accesstoken}}",
+								"description": ""
+							}
+						],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
